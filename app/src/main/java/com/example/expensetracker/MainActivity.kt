@@ -14,8 +14,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.data.ExpenseDatabase
 import com.example.expensetracker.data.ExpenseRepository
 import com.example.expensetracker.ui.ExpenseViewModel
-import com.example.expensetracker.ui.components.AddExpenseDialog
+import com.example.expensetracker.ui.components.AddCategoryDialog
+import com.example.expensetracker.ui.components.AddExpenseFormDialog
 import com.example.expensetracker.ui.components.BottomNavigationBar
+import com.example.expensetracker.ui.components.ExpenseCategory
 import com.example.expensetracker.ui.screens.DashboardScreen
 import com.example.expensetracker.ui.theme.ExpenseTrackerTheme
 
@@ -42,14 +44,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ExpenseTrackerApp(viewModel: ExpenseViewModel) {
     var selectedTab by remember { mutableStateOf(0) }
-    var showAddDialog by remember { mutableStateOf(false) }
+    var showCategoryDialog by remember { mutableStateOf(false) }
+    var showExpenseFormDialog by remember { mutableStateOf(false) }
+    var selectedCategory by remember { mutableStateOf<ExpenseCategory?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Main content
         when (selectedTab) {
             0 -> DashboardScreen(
                 viewModel = viewModel,
-                onAddExpenseClick = { showAddDialog = true }
+                onAddExpenseClick = { showCategoryDialog = true }
             )
             1 -> ReportsScreen() // Placeholder
             2 -> BudgetScreen() // Placeholder  
@@ -63,13 +67,30 @@ fun ExpenseTrackerApp(viewModel: ExpenseViewModel) {
             modifier = Modifier.align(Alignment.BottomCenter)
         )
         
-        // Add Expense Dialog
-        if (showAddDialog) {
-            AddExpenseDialog(
-                onDismiss = { showAddDialog = false },
+        // Category Selection Dialog
+        if (showCategoryDialog) {
+            AddCategoryDialog(
+                onDismiss = { showCategoryDialog = false },
+                onCategorySelected = { category ->
+                    selectedCategory = category
+                    showCategoryDialog = false
+                    showExpenseFormDialog = true
+                }
+            )
+        }
+        
+        // Expense Form Dialog
+        if (showExpenseFormDialog && selectedCategory != null) {
+            AddExpenseFormDialog(
+                category = selectedCategory!!,
+                onDismiss = { 
+                    showExpenseFormDialog = false
+                    selectedCategory = null
+                },
                 onConfirm = { amount, description, category ->
                     viewModel.addExpense(amount, description, category)
-                    showAddDialog = false
+                    showExpenseFormDialog = false
+                    selectedCategory = null
                 }
             )
         }

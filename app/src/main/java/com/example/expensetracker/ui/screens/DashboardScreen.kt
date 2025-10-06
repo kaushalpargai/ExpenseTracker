@@ -49,8 +49,14 @@ fun DashboardScreen(
                 brush = Brush.verticalGradient(
                     colors = listOf(GradientStart, GradientEnd)
                 )
-            ),
-        contentPadding = PaddingValues(16.dp),
+            )
+            .statusBarsPadding(),
+        contentPadding = PaddingValues(
+            start = 16.dp,
+            end = 16.dp,
+            top = 16.dp,
+            bottom = 100.dp // Extra space for bottom navigation
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
@@ -273,8 +279,5 @@ fun DashboardScreen(
             }
         }
         
-        item {
-            Spacer(modifier = Modifier.height(80.dp)) // Space for bottom navigation
-        }
     }
 }
