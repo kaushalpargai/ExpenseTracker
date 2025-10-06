@@ -5,10 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,9 +15,9 @@ import com.example.expensetracker.data.ExpenseDatabase
 import com.example.expensetracker.data.ExpenseRepository
 import com.example.expensetracker.ui.ExpenseViewModel
 import com.example.expensetracker.ui.components.AddExpenseDialog
-import com.example.expensetracker.ui.components.ExpenseList
+import com.example.expensetracker.ui.components.BottomNavigationBar
+import com.example.expensetracker.ui.screens.DashboardScreen
 import com.example.expensetracker.ui.theme.ExpenseTrackerTheme
-import java.text.NumberFormat
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,76 +39,69 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseTrackerApp(viewModel: ExpenseViewModel) {
-    val expenses by viewModel.expenses.collectAsState()
-    val totalExpenses by viewModel.totalExpenses.collectAsState()
+    var selectedTab by remember { mutableStateOf(0) }
     var showAddDialog by remember { mutableStateOf(false) }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = { Text("Expense Tracker") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Main content
+        when (selectedTab) {
+            0 -> DashboardScreen(
+                viewModel = viewModel,
+                onAddExpenseClick = { showAddDialog = true }
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showAddDialog = true }
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add expense")
-            }
+            1 -> ReportsScreen() // Placeholder
+            2 -> BudgetScreen() // Placeholder  
+            3 -> AccountScreen() // Placeholder
         }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            // Total expenses card
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Total Expenses",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = NumberFormat.getCurrencyInstance().format(totalExpenses ?: 0.0),
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                }
-            }
-
-            // Expense list
-            ExpenseList(
-                expenses = expenses,
-                onDeleteExpense = { viewModel.deleteExpense(it) }
-            )
-        }
-
+        
+        // Bottom Navigation
+        BottomNavigationBar(
+            selectedTab = selectedTab,
+            onTabSelected = { selectedTab = it },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+        
+        // Add Expense Dialog
         if (showAddDialog) {
             AddExpenseDialog(
                 onDismiss = { showAddDialog = false },
                 onConfirm = { amount, description, category ->
                     viewModel.addExpense(amount, description, category)
+                    showAddDialog = false
                 }
             )
         }
+    }
+}
+
+@Composable
+fun ReportsScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("Reports Screen - Coming Soon")
+    }
+}
+
+@Composable
+fun BudgetScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("Budget Screen - Coming Soon")
+    }
+}
+
+@Composable
+fun AccountScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("Account Screen - Coming Soon")
     }
 }
