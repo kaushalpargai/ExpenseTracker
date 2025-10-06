@@ -32,29 +32,35 @@ fun BottomNavigationBar(
         BottomNavItem("Account", Icons.Default.Person, 3)
     )
     
-    Card(
+    // Container with system navigation padding
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .navigationBarsPadding(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            .navigationBarsPadding()
     ) {
-        Row(
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
-            tabs.forEach { tab ->
-                BottomNavTab(
-                    item = tab,
-                    isSelected = selectedTab == tab.index,
-                    onClick = { onTabSelected(tab.index) }
-                )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                tabs.forEach { tab ->
+                    BottomNavTab(
+                        item = tab,
+                        isSelected = selectedTab == tab.index,
+                        onClick = { onTabSelected(tab.index) }
+                    )
+                }
             }
         }
     }
