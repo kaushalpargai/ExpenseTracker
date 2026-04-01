@@ -26,4 +26,35 @@ interface ExpenseDao {
 
     @Delete
     suspend fun deleteExpense(expense: Expense)
+
+    @Query("""
+        SELECT category, SUM(amount) as totalAmount, COUNT(*) as expenseCount, 0.0 as percentage
+        FROM expenses 
+        GROUP BY category 
+        ORDER BY totalAmount DESC
+    """)
+    fun getCategorySummaries(): Flow<List<CategorySummary>>
+
+    @Query("""
+        SELECT * FROM expenses 
+        WHERE date >= :startDate AND date <= :endDate 
+        ORDER BY date DESC
+    """)
+    fun getExpensesByDateRange(startDate: Long, endDate: Long): Flow<List<Expense>>
+
+    @Query("SELECT * FROM expenses WHERE category = :category ORDER BY date DESC")
+    fun getExpensesByCategory(category: String): Flow<List<Expense>>
+
+    @Query("""
+        SELECT * FROM expenses 
+        WHERE date >= :startDate 
+        ORDER BY date DESC
+    """)
+    fun getExpensesSinceDate(startDate: Long): Flow<List<Expense>>
+
+    @Query("""
+        SELECT SUM(amount) FROM expenses 
+        WHERE date >= :startDate AND date <= :endDate
+    """)
+    fun getTotalExpensesByDateRange(startDate: Long, endDate: Long): Flow<Double?>
 }

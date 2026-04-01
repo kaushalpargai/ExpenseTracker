@@ -78,7 +78,7 @@ fun StatsCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "+$${String.format("%.2f", amount)}",
+                    text = "+₹${String.format("%.2f", amount)}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary
