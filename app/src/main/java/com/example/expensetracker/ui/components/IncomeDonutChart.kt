@@ -52,7 +52,7 @@ fun IncomeDonutChart(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "$${String.format("%.2f", totalIncome)}",
+                    text = "₹${String.format("%.2f", totalIncome)}",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary

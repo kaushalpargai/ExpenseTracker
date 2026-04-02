@@ -139,7 +139,7 @@ fun DashboardScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "$${String.format("%.2f", totalNetWorth)}",
+                        text = "₹${String.format("%.2f", totalNetWorth)}",
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         color = TextPrimary

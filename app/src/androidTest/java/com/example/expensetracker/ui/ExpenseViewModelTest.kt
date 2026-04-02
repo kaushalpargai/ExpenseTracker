@@ -34,7 +34,7 @@ class ExpenseViewModelTest {
         coEvery { mockRepository.allExpenses } returns MutableStateFlow(testExpenses)
         coEvery { mockRepository.totalExpenses } returns MutableStateFlow(300.0)
         
-        viewModel = ExpenseViewModel(mockRepository)
+        viewModel = ExpenseViewModel(mockRepository, null)
     }
 
     @Test
@@ -55,6 +55,7 @@ class ExpenseViewModelTest {
 
         // Verify it matches repository data
         assertEquals(300.0, total)
+
     }
 
     @Test
@@ -137,7 +138,7 @@ class ExpenseViewModelTest {
         coEvery { emptyRepository.allExpenses } returns MutableStateFlow(emptyList())
         coEvery { emptyRepository.totalExpenses } returns MutableStateFlow(0.0)
         
-        val newViewModel = ExpenseViewModel(emptyRepository)
+        val newViewModel = ExpenseViewModel(emptyRepository, null)
 
         // Verify initial state
         val expenses = newViewModel.expenses.first()
