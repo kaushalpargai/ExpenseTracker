@@ -55,6 +55,7 @@ class ExpenseViewModelTest {
 
         // Verify it matches repository data
         assertEquals(300.0, total)
+
     }
 
     @Test
